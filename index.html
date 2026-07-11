@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Precios App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    label {
+      display: inline-block;
+      width: 180px;
+      margin-bottom: 5px;
+    }
+    input {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #006600;
+    }
+  </style>
+</head>
+<body>
+  <h1>Precios App</h1>
+
+  <label>Precio dólar (en pesos):</label>
+  <input type="number" id="dolar"><br><br>
+
+  <h2>Productos por kilo (USD)</h2>
+  <label>Picadura:</label><input type="number" id="picadura"><br>
+  <label>Cogollo:</label><input type="number" id="cogollo"><br>
+  <label>Cocaína:</label><input type="number" id="cocaina"><br>
+
+  <h2>Productos por unidad (USD)</h2>
+  <label>Plantas:</label><input type="number" id="plantas"><br>
+  <label>Semillas:</label><input type="number" id="semillas"><br>
+  <label>Éxtasis:</label><input type="number" id="extasis"><br><br>
+
+  <button onclick="guardarPrecios()">Guardar precios</button><br><br>
+
+  <label>Producto:</label><input type="text" id="producto"><br>
+  <label>Cantidad en gramos/unidades:</label><input type="number" id="cantidad"><br><br>
+
+  <button onclick="calcular()">Calcular costo</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    let precios = {
+      productos_kilo: { picadura: 0, cogollo: 0, cocaina: 0 },
+      productos_unidad: { plantas: 0, semillas: 0, extasis: 0 },
+      dolar: 0
+    };
+
+    function guardarPrecios() {
+      precios.dolar = parseFloat(document.getElementById("dolar").value) || 0;
+      precios.productos_kilo.picadura = parseFloat(document.getElementById("picadura").value) || 0;
+      precios.productos_kilo.cogollo = parseFloat(document.getElementById("cogollo").value) || 0;
+      precios.productos_kilo.cocaina = parseFloat(document.getElementById("cocaina").value) || 0;
+
+      precios.productos_unidad.plantas = parseFloat(document.getElementById("plantas").value) || 0;
+      precios.productos_unidad.semillas = parseFloat(document.getElementById("semillas").value) || 0;
+      precios.productos_unidad.extasis = parseFloat(document.getElementById("extasis").value) || 0;
+
+      alert("Precios guardados correctamente");
+    }
+
+    function calcular() {
+      let prod = document.getElementById("producto").value.toLowerCase();
+      let cantidad = parseFloat(document.getElementById("cantidad").value);
+      let dolar = precios.dolar;
+      let costo = 0;
+
+      if (isNaN(cantidad)) {
+        alert("Ingrese una cantidad válida");
+        return;
+      }
+
+      if (precios.productos_kilo[prod] !== undefined) {
+        costo = precios.productos_kilo[prod] * (cantidad / 1000) * dolar;
+      } else if (precios.productos_unidad[prod] !== undefined) {
+        costo = precios.productos_unidad[prod] * cantidad * dolar;
+      } else {
+        alert("Producto no encontrado");
+        return;
+      }
+
+      document.getElementById("resultado").innerText = `Costo total en pesos: ${costo.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
